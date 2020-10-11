@@ -24,25 +24,25 @@
       let canvas = document.getElementById('canvas');
 	  
       if (canvas.getContext&&animation.getContext) {
-        ctx = canvas.getContext("2d");
-		
-        clear(ctx,canvas);
-        // Draw border
-        drawBorder(ctx);
-        recursiveDraw(recursion_depth);
+	ctx = canvas.getContext("2d");
+
+	clear(ctx,canvas);
+	// Draw border
+	drawBorder(ctx);
+	recursiveDraw(recursion_depth);
       }
-	   function clear(ctx,canvas){
-			ctx.clearRect(0, 0, canvas.width, canvas.height);
-	   }
+	function clear(ctx,canvas){
+		ctx.clearRect(0, 0, canvas.width, canvas.height);
+	}
        function drawBorder(ctx) {
-        ctx.beginPath();
-        ctx.moveTo(0, 0);
-        ctx.lineTo(len, 0);
-        ctx.lineTo(len, len);
-        ctx.lineTo(0, len);
-        ctx.closePath();
-        ctx.stroke();
-      }
+		ctx.beginPath();
+		ctx.moveTo(0, 0);
+		ctx.lineTo(len, 0);
+		ctx.lineTo(len, len);
+		ctx.lineTo(0, len);
+		ctx.closePath();
+		ctx.stroke();
+       }
 
       // Recursive draw 
       function recursiveDraw(step, color = null) {
@@ -77,27 +77,27 @@
         }
         else drawT(color,ctx);
       }
-		function animate(transform){
-			if(transform==1){
-				interval = setInterval(rotation,3);
-			}else if(transform==2){
-				interval = setInterval(translation,3);
-			}else if(transform==3){
-				interval = setInterval(reflection, 3);
-			}else if(transform==4){
-				interval = setInterval(dilation,3);
-			}
-		}
-		function rotation(){
-			skaleX = 1;
-			while(skaleX!=-1){
-				skaleX=skaleX-0.1;
-				anim.transform(skaleX, 0, 0, 1, len, 0);
-				drawT("black", anim);
-			}
-			clearInterval(interval);
+// 	function animate(transform){
+// 		if(transform==1){
+// 			interval = setInterval(rotation,3);
+// 		}else if(transform==2){
+// 			interval = setInterval(translation,3);
+// 		}else if(transform==3){
+// 			interval = setInterval(reflection, 3);
+// 		}else if(transform==4){
+// 			interval = setInterval(dilation,3);
+// 		}
+// 	}
+// 	function rotation(){
+// 		skaleX = 1;
+// 		while(skaleX!=-1){
+// 			skaleX=skaleX-0.1;
+// 			anim.transform(skaleX, 0, 0, 1, len, 0);
+// 			drawT("black", anim);
+// 		}
+// 		clearInterval(interval);
 
-		}
+// 	}
       function drawT(color,ctx) {
         ctx.fillStyle = color ? color : "black";
         ctx.beginPath();
