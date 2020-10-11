@@ -1,0 +1,137 @@
+<html>
+
+<head>
+  <script type="application/javascript">
+
+    const len = 500
+    let recursion_depth = 6
+
+    function redraw(value) {
+      recursion_depth = value;
+      draw()
+
+    }
+	//function anim(){
+	//let animation = document.getElementById('animation');
+	 // let interval = 0;
+	 // if(animation.getContext){
+	 // anim.animation.getContext("2d");
+	 // clear(anim);
+	 // drawBorder(anim);
+	  
+	//}
+    function draw() {
+      let canvas = document.getElementById('canvas');
+	  
+      if (canvas.getContext&&animation.getContext) {
+        ctx = canvas.getContext("2d");
+		
+        clear(ctx,canvas);
+        // Draw border
+        drawBorder(ctx);
+        recursiveDraw(recursion_depth);
+      }
+	   function clear(ctx,canvas){
+			ctx.clearRect(0, 0, canvas.width, canvas.height);
+	   }
+       function drawBorder(ctx) {
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.lineTo(len, 0);
+        ctx.lineTo(len, len);
+        ctx.lineTo(0, len);
+        ctx.closePath();
+        ctx.stroke();
+      }
+
+      // Recursive draw 
+      function recursiveDraw(step, color = null) {
+        if (step > 0) {
+          step = step - 1;
+
+          // top left
+          ctx.save();
+          ctx.transform(0, 0.5, -0.5, 0, 0.5 * len, 0);
+          recursiveDraw(step, color ? color : "orange");
+          ctx.restore();
+
+          //top right
+          ctx.save();
+          ctx.transform(-0.5, 0, 0, 0.5, len, 0);
+          recursiveDraw(step, color ? color : "purple");
+          ctx.restore();
+
+
+          // bottom left
+          ctx.save()
+		  ctx.transform(0,0.25,0.25,0,0.25*len,0.5*len);
+          recursiveDraw(step, color ? color : "green");
+          ctx.restore();
+
+          // bottom right
+          ctx.save()
+		  ctx.transform(0.5,0,0,0.5,0.5*len,0.5*len);
+          recursiveDraw(step, color ? color : "red");
+          ctx.restore()
+
+        }
+        else drawT(color,ctx);
+      }
+		function animate(transform){
+			if(transform==1){
+				interval = setInterval(rotation,3);
+			}else if(transform==2){
+				interval = setInterval(translation,3);
+			}else if(transform==3){
+				interval = setInterval(reflection, 3);
+			}else if(transform==4){
+				interval = setInterval(dilation,3);
+			}
+		}
+		function rotation(){
+			skaleX = 1;
+			while(skaleX!=-1){
+				skaleX=skaleX-0.1;
+				anim.transform(skaleX, 0, 0, 1, len, 0);
+				drawT("black", anim);
+			}
+			clearInterval(interval);
+
+		}
+      function drawT(color,ctx) {
+        ctx.fillStyle = color ? color : "black";
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.lineTo(len, 0);
+		ctx.lineTo(len,len/10);
+		ctx.lineTo(len/3,len/10);
+        ctx.lineTo(len/3, len);
+        ctx.lineTo(0, len);
+        ctx.fill();
+      }
+    }       
+  </script>
+</head>
+
+<body onload="draw();">
+  <h1>1.Fractal</h1>
+  <div>
+    <input type="number" value="6" min="0" max="7" oninput="redraw(value)">
+  </div>
+  <div>
+    <canvas id="canvas" width="500" height="500" style=""></canvas>
+    <img src="C:\Users\Darbas\Documents\5semestras\grafika\1uzd.png">
+  </div>
+  <div>
+	  <h1>2.Animation</h1>
+	  	<button onclick="animate(1)">T_1</button>
+		<button onclick="animate(2)">T_2</button>
+		<button >T_3</button>
+		<button >T_4</button>
+   </div>
+   <div>
+		<canvas id="animation" width="500" height="500" ></canvas>
+    </div>
+</body>
+
+</html>
