@@ -1,0 +1,145 @@
+<html>
+
+<head>
+  <script type="application/javascript">
+    const len = 500
+    const animation_time_ms = 2500;
+    const wait_time_s = 0.5
+    const wait_time = wait_time_s * 1000 / animation_time_ms
+
+    let button1 = false
+    let button2 = false
+    let button3 = false
+    let button4 = false
+    let init_time = null;
+
+    function animate() {
+      window.requestAnimationFrame(draw)
+    }
+
+    function button(num) {
+      if (num == 4) {
+        button4 = true;
+        button1 = false;
+        button2 = false;
+        button3 = false;
+      }
+      if (num == 1) {
+        button1 = true;
+        button4 = false;
+        button2 = false;
+        button3 = false;
+      }
+      if (num == 2) {
+        button2 = true;
+        button4 = false;
+        button1 = false;
+        button3 = false;
+      }
+      if (num == 3) {
+        button3 = true;
+        button4 = false;
+        button2 = false;
+        button1 = false;
+      }
+      init_time = null;
+      animate();
+    }
+
+    function draw(time) {
+      let ctx = null
+      init_time = init_time ? init_time : time;
+      let canvas = document.getElementById('canvas');
+      if (canvas.getContext) {
+        ctx = canvas.getContext("2d")
+        clearCanvas(ctx)
+        drawBorder(ctx)
+        let delta = get_delta_scale(time);
+        if (button1 == true) {
+          localDelta = Math.min(delta, 1)
+          ctx.fillStyle = "orange"
+          animate(ctx, localDelta, { skew_x: 250, skew_y: 0, scale: 0.5, rotate: 90 });
+        }
+        if (button2 == true) {
+          localDelta = Math.min(delta, 1)
+          ctx.fillStyle = "purple"
+          animate(ctx, localDelta, { skew_x: 500, skew_y: 0, scale: 0.5, flip: true });
+        }
+        if (button3 == true) {
+          localDelta = Math.min(delta, 1)
+          ctx.fillStyle = "green"
+          animate(ctx, localDelta, { skew_x: 125, skew_y: 250, scale: 0.25, rotate: 90, flip: true });
+        }
+        if (button4 == true) {
+          localDelta = Math.min(delta, 1)
+          ctx.fillStyle = "red"
+          animate(ctx, localDelta, { skew_x: 250, skew_y: 250, scale: 0.5 });
+        }
+        window.requestAnimationFrame(draw);
+      }
+
+      function drawBorder(ctx) {
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.lineTo(len, 0);
+        ctx.lineTo(len, len);
+        ctx.lineTo(0, len);
+        ctx.closePath();
+        ctx.stroke();
+      }
+
+      function clearCanvas(ctx) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+
+
+      function get_delta_scale(time) {
+        let real_delta = time - init_time
+        return real_delta / animation_time_ms
+      }
+
+      function animate(ctx, delta, { skew_x = 0, skew_y = 0, rotate = 0, scale = 1, flip = false }) {
+        ctx.save()
+        //MOVE
+        ctx.transform(1, 0, 0, 1, delta * skew_x, delta * skew_y)
+        //FLIP && SCALE
+        flip_delta = 1
+        if (flip)
+          flip_delta = 1 - 2 * delta
+        let _scale = 1 - delta + delta * scale;
+        ctx.transform(_scale * flip_delta, 0, 0, _scale, 0, 0)
+        //ROTATE
+        ctx.rotate(Math.PI * 2 * rotate / 360 * delta)
+        drawT()
+        ctx.restore();
+      }
+
+      function drawT() {
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.lineTo(len, 0);
+        ctx.lineTo(len, len / 10);
+        ctx.lineTo(len / 3, len / 10);
+        ctx.lineTo(len / 3, len);
+        ctx.lineTo(0, len);
+        ctx.fill();
+      }
+    }       
+  </script>
+</head>
+
+<body onload="draw();">
+  <div>
+    <h1>2.Animation</h1>
+    <button onclick="button(1);">T_1</button>
+    <button onclick="button(2);">T_2</button>
+    <button onclick="button(3);">T_3</button>
+    <button onclick="button(4);">T_4</button>
+  </div>
+  <div>
+    <canvas id="canvas" width="500" height="500"></canvas>
+    <img src="C:\Users\Darbas\Documents\5semestras\grafika\1uzd.png">
+  </div>
+</body>
+
+</html>
